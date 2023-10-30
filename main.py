@@ -1,16 +1,33 @@
-# This is a sample Python script.
+import sys
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+from PyQt6 import uic  # Импортируем uic
+from PyQt6.QtGui import QPixmap
+from PyQt6.QtWidgets import QApplication, QMainWindow, QGraphicsScene, QGraphicsView
 
 
-# Press the green button in the gutter to run the script.
+class MyWidget(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi('start_window.ui', self)  # Загружаем дизайн
+        scene = QGraphicsScene(0, 0, 400, 200)
+        scene.addPixmap(QPixmap("logo.jpg"))
+
+        # self.pushButton.clicked.connect(self.run)
+        # Обратите внимание: имя элемента такое же как в QTDesigner
+
+    def run(self):
+        self.label.setText("OK")
+        # Имя элемента совпадает с objectName в QTDesigner
+
+import hashlib
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    print(hashlib.md5(b'admin_admin').hexdigest())
+    app = QApplication(sys.argv)
+    ex = MyWidget()
+    ex.show()
+    sys.exit(app.exec())
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+print(hashlib.md5(bytes(input(), encoding=' utf-8')).hexdigest())
+
