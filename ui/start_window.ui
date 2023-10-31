@@ -29,29 +29,47 @@
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>630</x>
-      <y>290</y>
-      <width>181</width>
-      <height>151</height>
+      <x>590</x>
+      <y>250</y>
+      <width>291</width>
+      <height>241</height>
      </rect>
     </property>
-    <layout class="QGridLayout" name="gridLayout_2">
+    <layout class="QGridLayout" name="loginLayout">
      <item row="4" column="0">
-      <widget class="QPushButton" name="loginButton_2">
+      <widget class="QPushButton" name="loginButton">
+       <property name="maximumSize">
+        <size>
+         <width>175</width>
+         <height>35</height>
+        </size>
+       </property>
        <property name="text">
         <string>Войти</string>
        </property>
       </widget>
      </item>
      <item row="3" column="0">
-      <widget class="QLineEdit" name="passwordLine_2">
+      <widget class="QLineEdit" name="passwordLine">
+       <property name="maximumSize">
+        <size>
+         <width>170</width>
+         <height>25</height>
+        </size>
+       </property>
        <property name="text">
         <string>password</string>
        </property>
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QLineEdit" name="loginLine_2">
+      <widget class="QLineEdit" name="loginLine">
+       <property name="maximumSize">
+        <size>
+         <width>170</width>
+         <height>25</height>
+        </size>
+       </property>
        <property name="text">
         <string>login</string>
        </property>
@@ -59,6 +77,18 @@
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="loginText">
+       <property name="minimumSize">
+        <size>
+         <width>170</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>170</width>
+         <height>25</height>
+        </size>
+       </property>
        <property name="text">
         <string>Login:</string>
        </property>
@@ -66,6 +96,18 @@
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="passwordText">
+       <property name="minimumSize">
+        <size>
+         <width>170</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>170</width>
+         <height>25</height>
+        </size>
+       </property>
        <property name="text">
         <string>Password:</string>
        </property>
