@@ -38,6 +38,10 @@ class DataBase:
         result = self.cursor.execute("SELECT `role` FROM `users` WHERE `login` = ?", (login,))
         return result.fetchall()[0][0]
 
+    def get_name(self, login):
+        result = self.cursor.execute("SELECT `name` FROM `users` WHERE `login` = ?", (login,))
+        return result.fetchall()[0][0]
+
     # def get_user_subj(self, user_id):
     #     """Достаем subj юзера в базе по его user_id"""
     #     result = self.cursor.execute("SELECT `subj` FROM `users` WHERE `user_id` = ?", (user_id,))

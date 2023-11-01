@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>StartWindow</class>
- <widget class="QMainWindow" name="StartWindow">
+ <class>MainWindow</class>
+ <widget class="QWidget" name="MainWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -29,26 +29,13 @@
    <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>300</x>
+      <x>590</x>
       <y>10</y>
-      <width>561</width>
+      <width>271</width>
       <height>154</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QPushButton" name="pushButton">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>70</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>импорт таблицы</string>
-       </property>
-      </widget>
-     </item>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
@@ -85,21 +72,27 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>10</y>
+      <y>30</y>
       <width>181</width>
       <height>151</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_4">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="greetingLabel">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>60</height>
+        </size>
+       </property>
        <property name="text">
         <string>Вы вошли как, </string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_8">
+      <widget class="QPushButton" name="logoutButton">
        <property name="maximumSize">
         <size>
          <width>180</width>
