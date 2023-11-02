@@ -42,6 +42,26 @@ class DataBase:
         result = self.cursor.execute("SELECT `name` FROM `users` WHERE `login` = ?", (login,))
         return result.fetchall()[0][0]
 
+    def get_role(self, login):
+        result = self.cursor.execute("SELECT `role` FROM `users` WHERE `login` = ?", (login,))
+        return result.fetchall()[0][0]
+
+    def add_user(self, login, password, name, role):
+        role = self.cursor.execute("SELECT `id` FROM `roles` WHERE `name` = ?", (role,)).fetchall()[0][0]
+        self.cursor.execute("INSERT INTO `users` (`login`, `password`, `name`, `role`) VALUES (?, ?, ?, ?)",
+                                (login, password, name, role))
+        return self.conn.commit()
+
+    def get_users_name_list(self):
+        return list(self.cursor.execute("SELECT name FROM users"))
+
+    def get_users_login_list(self):
+        return list(self.cursor.execute("SELECT login FROM users"))
+
+    def del_user(self, name):
+        self.cursor.execute("DELETE FROM users WHERE name = ?", (name,)).fetchall()
+        self.conn.commit()
+
     # def get_user_subj(self, user_id):
     #     """Достаем subj юзера в базе по его user_id"""
     #     result = self.cursor.execute("SELECT `subj` FROM `users` WHERE `user_id` = ?", (user_id,))

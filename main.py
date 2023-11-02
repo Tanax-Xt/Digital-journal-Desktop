@@ -1,21 +1,24 @@
 import sys
 from hashlib import md5
 
-from PyQt6 import uic  # Импортируем uic
+from PyQt6 import uic
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel
 
 from database import DataBase
-from dialog import AboutDialog, AddUserDialog
+from dialog import AboutDialog, AddUserDialog, DelUser
 
 
-class MainWindow(QMainWindow):
-    """Главное окно"""
+class StartWidget(QMainWindow):
+    """Стартовое окно"""
 
     def __init__(self):
         super().__init__()
-        self.check_authorization()
         self.load_Ui()
+        self.check_authorization()
+
+
+
         # scene = QGraphicsScene(0, 0, 400, 200)
         # scene.addPixmap(QPixmap("data/logo.jpg"))
 
@@ -23,6 +26,7 @@ class MainWindow(QMainWindow):
         uic.loadUi('ui/start_window.ui', self)
         self.setWindowTitle("Цифровой дневник.Desktop")
         self.set_logo()
+        self.show()
         self.loginButton.clicked.connect(self.authorization)
         self.action_about.triggered.connect(self.about_action)
 
@@ -49,23 +53,9 @@ class MainWindow(QMainWindow):
             f.write(login + '\n' + md5(bytes(password, encoding=' utf-8')).hexdigest())
 
     def load_main_widget(self, login):
-        uic.loadUi(f'ui/main_window_{db.get_role(login)}.ui', self)
-        self.greetingLabel.setText(f'Вы вошли как, {db.get_name(login)}')
-        self.setWindowTitle("Цифровой дневник.Desktop")
-        self.set_logo()
-        self.logoutButton.clicked.connect(self.logout)
-        self.addUser.clicked.connect(self.add_user)
-        self.menuBar.addAction(self.action_about)
-        self.action_about.triggered.connect(self.about_action)
-
-    def add_user(self):
-        dlg = AddUserDialog()
-        dlg.exec()
-
-    def logout(self):
-        self.load_Ui()
-        with open('data/login.txt', 'w') as f:
-            f.write('')
+        self.main_widget = MainWidget(login)
+        self.close()
+        self.main_widget.show()
 
     def about_action(self):
         '''Обработка "О программе"'''
@@ -81,7 +71,6 @@ class MainWindow(QMainWindow):
                 self.add_authorization(login, password)
                 self.load_main_widget(login)
                 # self.loginLayout.setVisible(False)
-
             else:
                 self.passwordLine.setText('Неверный пароль')
         else:
@@ -89,23 +78,56 @@ class MainWindow(QMainWindow):
             self.passwordLine.setText('')
 
 
-# class AboutDialog(QDialog):
-#     def __init__(self):
-#         super().__init__()
-#         self.layout = QVBoxLayout()
-#         self.setWindowTitle("О программе")
-#         message = QLabel("""Цифровой дневник.Desktop\n
-# «Цифровой дневник. Desktop» – это электронный журнал для учителей и школьников
-# с поддержкой импорта успеваемости учащихся в виде таблиц формата .csv и экспорта этих данных в форматах .csv и .xlsx.
-# В программе доступны три уровня прав: ученик, учитель и администратор.""")
-#         self.layout.addWidget(message)
-#         self.setLayout(self.layout)
+class MainWidget(QMainWindow):
+    def __init__(self, login):
+        super().__init__()
+        self.load_ui(login)
+
+    def load_ui(self, login):
+        uic.loadUi(f'ui/main_window_{db.get_role(login)}.ui', self)
+        self.greetingLabel.setText(f'Вы вошли как, {db.get_name(login)}')
+        self.setWindowTitle("Цифровой дневник.Desktop")
+        self.set_logo()
+        self.logoutButton.clicked.connect(self.logout)
+        self.menuBar.addAction(self.action_about)
+        self.action_about.triggered.connect(self.about_action)
+        if db.get_role(login) == 3:
+            self.addUser.clicked.connect(self.add_user)
+            self.delUser.clicked.connect(self.del_user)
+
+    def set_logo(self):
+        self.pixmap = QPixmap('data/logo_70_70.jpeg')
+        self.image = QLabel(self)
+        self.image.move(0, 0)
+        self.image.resize(70, 70)
+        self.image.setPixmap(self.pixmap)
+
+    def add_user(self):
+        dlg = AddUserDialog(db)
+        dlg.exec()
+
+    def del_user(self):
+        dlg = DelUser(db)
+        dlg.exec()
+
+    def about_action(self):
+        '''Обработка "О программе"'''
+        dlg = AboutDialog()
+        dlg.exec()
+
+    def logout(self):
+        with open('data/login.txt', 'w') as f:
+            f.write('')
+        self.close()
+        self.start_widget = StartWidget()
+        # self.start_widget.show()
+
 
 if __name__ == '__main__':
-    # print(hashlib.md5(b'admin_admin').hexdigest())
+    # print(md5(b'admin').hexdigest())
     db = DataBase('data/database.sqlite')
     app = QApplication(sys.argv)
-    ex = MainWindow()
-    ex.show()
+    ex = StartWidget()
+    # ex.show()
     sys.exit(app.exec())
     db.close()
