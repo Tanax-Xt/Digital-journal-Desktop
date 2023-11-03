@@ -160,6 +160,8 @@ class MainWidget(QMainWindow):
             self.addUser.clicked.connect(self.add_user)
             self.delUser.clicked.connect(self.del_user)
             self.teacher_table()
+        if db.get_role(login) == 2:
+            self.teacher_table()
 
     def teacher_table(self):
         logins = [''.join(i) for i in db.get_users_login_list_from_marks()]
