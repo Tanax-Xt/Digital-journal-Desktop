@@ -1,6 +1,7 @@
 import sys
 from hashlib import md5
 
+from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6 import uic
 from PyQt6.QtGui import QPixmap, QStandardItem, QStandardItemModel
 from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel
@@ -9,7 +10,76 @@ from database import DataBase
 from dialog import AboutDialog, AddUserDialog, DelUser
 
 
-class StartWidget(QMainWindow):
+class Ui_StartWindow(object):
+    def setupUi(self, StartWindow):
+        StartWindow.setObjectName("StartWindow")
+        StartWindow.resize(1440, 780)
+        StartWindow.setMinimumSize(QtCore.QSize(1440, 780))
+        StartWindow.setMaximumSize(QtCore.QSize(1440, 780))
+        self.centralwidget = QtWidgets.QWidget(parent=StartWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.gridLayoutWidget = QtWidgets.QWidget(parent=self.centralwidget)
+        self.gridLayoutWidget.setGeometry(QtCore.QRect(590, 250, 291, 241))
+        self.gridLayoutWidget.setObjectName("gridLayoutWidget")
+        self.loginLayout = QtWidgets.QGridLayout(self.gridLayoutWidget)
+        self.loginLayout.setContentsMargins(0, 0, 0, 0)
+        self.loginLayout.setObjectName("loginLayout")
+        self.loginButton = QtWidgets.QPushButton(parent=self.gridLayoutWidget)
+        self.loginButton.setMaximumSize(QtCore.QSize(175, 35))
+        self.loginButton.setObjectName("loginButton")
+        self.loginLayout.addWidget(self.loginButton, 4, 0, 1, 1)
+        self.passwordLine = QtWidgets.QLineEdit(parent=self.gridLayoutWidget)
+        self.passwordLine.setMaximumSize(QtCore.QSize(170, 25))
+        self.passwordLine.setObjectName("passwordLine")
+        self.loginLayout.addWidget(self.passwordLine, 3, 0, 1, 1)
+        self.loginLine = QtWidgets.QLineEdit(parent=self.gridLayoutWidget)
+        self.loginLine.setMaximumSize(QtCore.QSize(170, 25))
+        self.loginLine.setObjectName("loginLine")
+        self.loginLayout.addWidget(self.loginLine, 1, 0, 1, 1)
+        self.loginText = QtWidgets.QLabel(parent=self.gridLayoutWidget)
+        self.loginText.setMinimumSize(QtCore.QSize(170, 25))
+        self.loginText.setMaximumSize(QtCore.QSize(170, 25))
+        self.loginText.setObjectName("loginText")
+        self.loginLayout.addWidget(self.loginText, 0, 0, 1, 1)
+        self.passwordText = QtWidgets.QLabel(parent=self.gridLayoutWidget)
+        self.passwordText.setMinimumSize(QtCore.QSize(170, 25))
+        self.passwordText.setMaximumSize(QtCore.QSize(170, 25))
+        self.passwordText.setObjectName("passwordText")
+        self.loginLayout.addWidget(self.passwordText, 2, 0, 1, 1)
+        StartWindow.setCentralWidget(self.centralwidget)
+        self.menuBar = QtWidgets.QMenuBar(parent=StartWindow)
+        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1440, 24))
+        self.menuBar.setObjectName("menuBar")
+        self.menu = QtWidgets.QMenu(parent=self.menuBar)
+        self.menu.setObjectName("menu")
+        StartWindow.setMenuBar(self.menuBar)
+        self.actionkvf = QtGui.QAction(parent=StartWindow)
+        self.actionkvf.setObjectName("actionkvf")
+        self.action_about = QtGui.QAction(parent=StartWindow)
+        self.action_about.setObjectName("action_about")
+        self.action_quit = QtGui.QAction(parent=StartWindow)
+        self.action_quit.setObjectName("action_quit")
+        self.menu.addAction(self.action_about)
+        self.menuBar.addAction(self.menu.menuAction())
+
+        self.retranslateUi(StartWindow)
+        QtCore.QMetaObject.connectSlotsByName(StartWindow)
+
+    def retranslateUi(self, StartWindow):
+        _translate = QtCore.QCoreApplication.translate
+        StartWindow.setWindowTitle(_translate("StartWindow", "MainWindow"))
+        self.loginButton.setText(_translate("StartWindow", "Войти"))
+        self.passwordLine.setText(_translate("StartWindow", "password"))
+        self.loginLine.setText(_translate("StartWindow", "login"))
+        self.loginText.setText(_translate("StartWindow", "Login:"))
+        self.passwordText.setText(_translate("StartWindow", "Password:"))
+        self.menu.setTitle(_translate("StartWindow", "Цифровой дневник"))
+        self.actionkvf.setText(_translate("StartWindow", "kvf"))
+        self.action_about.setText(_translate("StartWindow", "О программе"))
+        self.action_quit.setText(_translate("StartWindow", "Закрыть"))
+
+
+class StartWidget(QMainWindow, Ui_StartWindow):
     """Стартовое окно"""
 
     def __init__(self):
@@ -17,11 +87,8 @@ class StartWidget(QMainWindow):
         self.load_Ui()
         self.check_authorization()
 
-        # scene = QGraphicsScene(0, 0, 400, 200)
-        # scene.addPixmap(QPixmap("data/logo.jpg"))
-
     def load_Ui(self):
-        uic.loadUi('ui/start_window.ui', self)
+        self.setupUi(self)
         self.setWindowTitle("Цифровой дневник.Desktop")
         self.set_logo()
         self.show()
