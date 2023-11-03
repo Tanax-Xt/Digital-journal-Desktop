@@ -2,7 +2,7 @@ import sys
 from hashlib import md5
 
 from PyQt6 import uic
-from PyQt6.QtGui import QPixmap
+from PyQt6.QtGui import QPixmap, QStandardItem, QStandardItemModel
 from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel
 
 from database import DataBase
@@ -16,8 +16,6 @@ class StartWidget(QMainWindow):
         super().__init__()
         self.load_Ui()
         self.check_authorization()
-
-
 
         # scene = QGraphicsScene(0, 0, 400, 200)
         # scene.addPixmap(QPixmap("data/logo.jpg"))
@@ -94,6 +92,41 @@ class MainWidget(QMainWindow):
         if db.get_role(login) == 3:
             self.addUser.clicked.connect(self.add_user)
             self.delUser.clicked.connect(self.del_user)
+            self.teacher_table()
+
+    def teacher_table(self):
+        logins = [''.join(i) for i in db.get_users_login_list_from_marks()]
+        marks = {}
+        subj = []
+        for i in logins:
+            user_marks = {}
+            if db.get_user_marks(i) is not None:
+                for s_m in db.get_user_marks(i)[1:-1].split(';'):
+                    s, m = s_m.split(':')
+                    s = s[1:-1]
+                    m = list(map(str, m[1:-1].split(',')))
+                    user_marks[s] = m
+                marks[db.get_name(i)] = user_marks
+                subj.extend(list(user_marks.keys()))
+            else:
+                marks[db.get_name(i)] = {}
+        subj = list(set(subj))
+        subj.sort()
+        logins.sort(key=lambda x: db.get_name(x))
+
+        self.model = QStandardItemModel(len(logins), len(subj) + 1)
+        self.model.setHorizontalHeaderLabels(["Имя", *subj])
+
+        for row in range(len(logins)):
+            for column in range(len(subj) + 1):
+                name = db.get_name(logins[row])
+                if column == 0:
+                    item = QStandardItem(name)
+                else:
+                    if subj[column - 1] in marks[name]:
+                        item = QStandardItem(', '.join(marks[name][subj[column - 1]]))
+                self.model.setItem(row, column, item)
+        self.tableView.setModel(self.model)
 
     def set_logo(self):
         self.pixmap = QPixmap('data/logo_70_70.jpeg')
@@ -105,10 +138,12 @@ class MainWidget(QMainWindow):
     def add_user(self):
         dlg = AddUserDialog(db)
         dlg.exec()
+        self.teacher_table()
 
     def del_user(self):
         dlg = DelUser(db)
         dlg.exec()
+        self.teacher_table()
 
     def about_action(self):
         '''Обработка "О программе"'''

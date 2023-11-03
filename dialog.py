@@ -136,7 +136,6 @@ class DelUser(QDialog, Ui_Dialog_2):
         self.db = db
         self.setupUi(self)
         names = [''.join(i) for i in db.get_users_name_list()]
-        print(db.get_users_login_list())
         self.comboBox.addItems(names)
         self.pushButton.clicked.connect(self.del_user)
 

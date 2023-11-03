@@ -50,6 +50,8 @@ class DataBase:
         role = self.cursor.execute("SELECT `id` FROM `roles` WHERE `name` = ?", (role,)).fetchall()[0][0]
         self.cursor.execute("INSERT INTO `users` (`login`, `password`, `name`, `role`) VALUES (?, ?, ?, ?)",
                                 (login, password, name, role))
+        if role == 1:
+            self.cursor.execute("INSERT INTO `marks` (`login`) VALUES (?)", (login,))
         return self.conn.commit()
 
     def get_users_name_list(self):
@@ -58,8 +60,18 @@ class DataBase:
     def get_users_login_list(self):
         return list(self.cursor.execute("SELECT login FROM users"))
 
+    def get_users_login_list_from_marks(self):
+        return list(self.cursor.execute("SELECT login FROM marks"))
+
+    def get_user_marks(self, login):
+        return self.cursor.execute("SELECT marks FROM marks WHERE login = ?", (login,)).fetchall()[0][0]
+
     def del_user(self, name):
+        login = self.cursor.execute("SELECT login FROM users WHERE name = ?", (name,)).fetchall()[0][0]
+        role = self.cursor.execute("SELECT role FROM users WHERE login = ?", (login,)).fetchall()[0][0]
         self.cursor.execute("DELETE FROM users WHERE name = ?", (name,)).fetchall()
+        if role == 1:
+            self.cursor.execute("DELETE FROM marks WHERE login = ?", (login,)).fetchall()
         self.conn.commit()
 
     # def get_user_subj(self, user_id):
