@@ -40,8 +40,9 @@ class MainWidget(QMainWindow):
             self.stud_table(login)
 
     def teacher_table(self):
-        logins = sorted([''.join(i) for i in self.db.get_users_login_list_from_marks()],
+        logins = sorted([i[0] for i in self.db.get_users_login_list_from_marks()],
                         key=lambda x: self.db.get_name(x))
+
         marks = {}
         subj = sorted(map(lambda x: x[0], self.db.subjs_list()))
         for i in logins:
@@ -71,8 +72,9 @@ class MainWidget(QMainWindow):
         self.tableView.setModel(self.model)
 
     def save_table(self):
-        logins = sorted([''.join(i) for i in self.db.get_users_login_list_from_marks()],
+        logins = sorted([i[0] for i in self.db.get_users_login_list_from_marks()],
                         key=lambda x: self.db.get_name(x))
+
         subj = sorted(map(lambda x: x[0], self.db.subjs_list()))
         for row in range(len(logins)):
             user_marks = '{'
@@ -123,7 +125,8 @@ class MainWidget(QMainWindow):
         worksheet = workbook.add_worksheet()
 
         subj = sorted(map(lambda x: x[0], self.db.subjs_list()))
-        logins = sorted([''.join(self.db.get_name(i)) for i in self.db.get_users_login_list_from_marks()])
+        logins = sorted([i[0] for i in self.db.get_users_login_list_from_marks()],
+                        key=lambda x: self.db.get_name(x))
 
         for column in range(len(subj) + 1):
             if column == 0:
@@ -141,7 +144,8 @@ class MainWidget(QMainWindow):
         with open('files/Успеваемость.csv', 'w', newline='', encoding="utf8") as csvfile:
             writer = csv.writer(csvfile, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             subj = sorted(map(lambda x: x[0], self.db.subjs_list()))
-            logins = sorted([''.join(self.db.get_name(i)) for i in self.db.get_users_login_list_from_marks()])
+            logins = sorted([i[0] for i in self.db.get_users_login_list_from_marks()],
+                            key=lambda x: self.db.get_name(x))
             writer.writerow(['Имя', *subj])
             for row in range(len(logins)):
                 col = []
