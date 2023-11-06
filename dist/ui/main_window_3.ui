@@ -81,7 +81,7 @@
           </size>
          </property>
          <property name="text">
-          <string>экспорт дневника в exsel</string>
+          <string>экспорт дневника в excel</string>
          </property>
         </widget>
        </item>
@@ -98,7 +98,7 @@
           </size>
          </property>
          <property name="text">
-          <string>добавить позьзователя</string>
+          <string>добавить пользователя</string>
          </property>
         </widget>
        </item>

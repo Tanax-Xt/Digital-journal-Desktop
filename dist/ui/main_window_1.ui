@@ -81,7 +81,7 @@
           </size>
          </property>
          <property name="text">
-          <string>экспорт дневника в exsel</string>
+          <string>экспорт дневника в excel</string>
          </property>
         </widget>
        </item>

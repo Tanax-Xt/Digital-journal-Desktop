@@ -30,12 +30,12 @@ class MainWidget(QMainWindow):
             self.saveButton.clicked.connect(self.save_table)
             self.addSubj.clicked.connect(self.add_subj)
             self.delSubj.clicked.connect(self.del_subj)
-            self.exselExport.clicked.connect(self.teacher_exsel_export)
+            self.exselExport.clicked.connect(self.teacher_excel_export)
             self.csvExport.clicked.connect(self.teacher_csv_export)
             self.teacher_table()
         if self.db.get_role(login) == 1:
             self.marksChart.clicked.connect(self.marks_chart)
-            self.studExselExport.clicked.connect(self.stud_exsel_export)
+            self.studExselExport.clicked.connect(self.stud_excel_export)
             self.studCsvExport.clicked.connect(self.stud_csv_export)
             self.stud_table(login)
 
@@ -120,7 +120,7 @@ class MainWidget(QMainWindow):
         dlg = AboutDialog()
         dlg.exec()
 
-    def teacher_exsel_export(self):
+    def teacher_excel_export(self):
         workbook = xlsxwriter.Workbook('files/Успеваемость.xlsx')
         worksheet = workbook.add_worksheet()
 
@@ -199,7 +199,7 @@ class MainWidget(QMainWindow):
                     col.append(self.model.index(row, column).data())
                 writer.writerow(col)
 
-    def stud_exsel_export(self):
+    def stud_excel_export(self):
         workbook = xlsxwriter.Workbook('files/Успеваемость.xlsx')
         worksheet = workbook.add_worksheet()
 
