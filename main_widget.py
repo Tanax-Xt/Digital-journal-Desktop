@@ -91,7 +91,7 @@ class MainWidget(QMainWindow):
     def set_logo(self):
         self.pixmap = QPixmap('data/logo_70_70.jpeg')
         self.image = QLabel(self)
-        self.image.move(0, 0)
+        self.image.move(0, 0) # На MacOs - (0, 0), на Windows (0, 21)
         self.image.resize(70, 70)
         self.image.setPixmap(self.pixmap)
 
