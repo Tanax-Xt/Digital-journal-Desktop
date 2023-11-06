@@ -79,6 +79,7 @@ class Ui_StartWindow(object):
 
 class StartWidget(QMainWindow, Ui_StartWindow):
     """Стартовое окно"""
+
     def __init__(self, db):
         super().__init__()
         self.db = db

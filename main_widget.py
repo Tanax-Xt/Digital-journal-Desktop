@@ -76,7 +76,6 @@ class MainWidget(QMainWindow):
                 user_marks = None
             self.db.update_marks(user_login, user_marks)
 
-
     def set_logo(self):
         self.pixmap = QPixmap('data/logo_70_70.jpeg')
         self.image = QLabel(self)

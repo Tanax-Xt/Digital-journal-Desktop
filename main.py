@@ -1,20 +1,13 @@
 import sys
-from hashlib import md5
 
-from PyQt6 import QtCore, QtGui, QtWidgets
-from PyQt6 import uic
-from PyQt6.QtGui import QPixmap, QStandardItem, QStandardItemModel
-from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel
+from PyQt6.QtWidgets import QApplication
 
-from database import DataBase
-from dialogs import AboutDialog, AddUserDialog, DelUserDialog
 import start_widget
+from database import DataBase
 
 if __name__ == '__main__':
-    # print(md5(b'admin').hexdigest())
     db = DataBase('data/database.sqlite')
     app = QApplication(sys.argv)
     ex = start_widget.StartWidget(db)
-    # ex.show()
     sys.exit(app.exec())
     db.close()

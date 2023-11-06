@@ -1,5 +1,6 @@
 from hashlib import md5
 
+from PyQt6 import QtCore, QtWidgets
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QLabel
 
 
@@ -14,9 +15,6 @@ class AboutDialog(QDialog):
 В программе доступны три уровня прав: ученик, учитель и администратор.""")
         self.layout.addWidget(message)
         self.setLayout(self.layout)
-
-
-from PyQt6 import QtCore, QtWidgets
 
 
 class Ui_Dialog(object):
