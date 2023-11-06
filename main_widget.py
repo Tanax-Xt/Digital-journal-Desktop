@@ -123,8 +123,7 @@ class MainWidget(QMainWindow):
         worksheet = workbook.add_worksheet()
 
         subj = sorted(map(lambda x: x[0], self.db.subjs_list()))
-        logins = sorted([''.join(i) for i in self.db.get_users_login_list_from_marks()],
-                        key=lambda x: self.db.get_name(x))
+        logins = sorted([''.join(self.db.get_name(i)) for i in self.db.get_users_login_list_from_marks()])
 
         for column in range(len(subj) + 1):
             if column == 0:
@@ -142,8 +141,7 @@ class MainWidget(QMainWindow):
         with open('files/Успеваемость.csv', 'w', newline='', encoding="utf8") as csvfile:
             writer = csv.writer(csvfile, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             subj = sorted(map(lambda x: x[0], self.db.subjs_list()))
-            logins = sorted([''.join(i) for i in self.db.get_users_login_list_from_marks()],
-                            key=lambda x: self.db.get_name(x))
+            logins = sorted([''.join(self.db.get_name(i)) for i in self.db.get_users_login_list_from_marks()])
             writer.writerow(['Имя', *subj])
             for row in range(len(logins)):
                 col = []
@@ -187,10 +185,33 @@ class MainWidget(QMainWindow):
         dlg.exec()
 
     def stud_csv_export(self):
-        ...
+        with open('files/Успеваемость.csv', 'w', newline='', encoding="utf8") as csvfile:
+            writer = csv.writer(csvfile, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            subj = sorted(map(lambda x: x[0], self.db.subjs_list()))
+            writer.writerow(['Имя', *subj])
+            for row in range(2):
+                col = []
+                for column in range(len(subj) + 1):
+                    col.append(self.model.index(row, column).data())
+                writer.writerow(col)
 
     def stud_exsel_export(self):
-        ...
+        workbook = xlsxwriter.Workbook('files/Успеваемость.xlsx')
+        worksheet = workbook.add_worksheet()
+
+        subj = sorted(map(lambda x: x[0], self.db.subjs_list()))
+
+        for column in range(len(subj) + 1):
+            if column == 0:
+                worksheet.write(0, column, 'Имя')
+            else:
+                worksheet.write(0, column, subj[column - 1])
+
+        for row in range(2):
+            for column in range(len(subj) + 1):
+                worksheet.write(row + 1, column, self.model.index(row, column).data())
+
+        workbook.close()
 
     def logout(self):
         with open('data/login.txt', 'w') as f:
