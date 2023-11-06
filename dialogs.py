@@ -185,12 +185,12 @@ class Ui_Dialog_4(object):
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(661, 519)
+        Form.resize(1320, 720)
         self.graphicsView = QtWidgets.QGraphicsView(parent=Form)
-        self.graphicsView.setGeometry(QtCore.QRect(40, 40, 581, 381))
+        self.graphicsView.setGeometry(QtCore.QRect(40, 40, 1240, 640))
         self.graphicsView.setObjectName("graphicsView")
         self.closeButton = QtWidgets.QPushButton(parent=Form)
-        self.closeButton.setGeometry(QtCore.QRect(270, 450, 113, 32))
+        self.closeButton.setGeometry(QtCore.QRect(660, 680, 114, 32))
         self.closeButton.setObjectName("closeButton")
 
         self.retranslateUi(Form)
@@ -244,9 +244,10 @@ class AddSubjDialog(QDialog, Ui_Dialog_3):
         self.pushButton.clicked.connect(self.add_subj)
 
     def add_subj(self):
-        title = self.subjTitle.text()
-        self.db.add_subj(title)
-        self.close()
+        if self.checkBox.isChecked():
+            title = self.subjTitle.text()
+            self.db.add_subj(title)
+            self.close()
 
 
 class DelSubjDialog(QDialog, Ui_Dialog_4):

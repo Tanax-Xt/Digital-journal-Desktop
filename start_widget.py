@@ -1,6 +1,7 @@
 from hashlib import md5
 
 from PyQt6 import QtCore, QtGui, QtWidgets
+
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QMainWindow, QLabel
 
@@ -140,3 +141,7 @@ class StartWidget(QMainWindow, Ui_StartWindow):
         else:
             self.loginLine.setText('Неверный логин')
             self.passwordLine.setText('')
+
+    # def keyPressEvent(self, event):
+    #     if event.key() in (QtCore.Qt.Key_Return, QtCore.Qt.Key_Enter):
+    #         self.authorization()

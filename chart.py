@@ -7,7 +7,7 @@ from matplotlib.figure import Figure
 
 
 class Chart(FigureCanvas):
-    def __init__(self, model, db, width=6, height=4, dpi=100):
+    def __init__(self, model, db, width=6, height=5, dpi=140):
         self.model = model
         self.db = db
         self.fig = Figure(figsize=(width, height), dpi=dpi)
@@ -35,7 +35,7 @@ class Chart(FigureCanvas):
                     bar_colors.append('tab:green')
                     bar_labels.append('4-5' if '4-5' not in bar_labels else '_4-5')
 
-                subjs.append(all_subjs[column - 1])
+                subjs.append(all_subjs[column - 1][:5] + '.')
                 marks.append(mark)
 
         self.axes.bar(subjs, marks, label=bar_labels, color=bar_colors)
