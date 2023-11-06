@@ -37,17 +37,30 @@
    <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>590</x>
-      <y>10</y>
-      <width>551</width>
+      <x>320</x>
+      <y>20</y>
+      <width>821</width>
       <height>154</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
+      <widget class="QPushButton" name="saveButton">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>70</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>сохранить изменения</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="csvExport">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -60,7 +73,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_3">
+        <widget class="QPushButton" name="exselExport">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -77,7 +90,7 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <widget class="QPushButton" name="pushButton_5">
+        <widget class="QPushButton" name="addSubj">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -85,12 +98,12 @@
           </size>
          </property>
          <property name="text">
-          <string>добавить урок</string>
+          <string>добавить предмет</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_7">
+        <widget class="QPushButton" name="delSubj">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -98,7 +111,7 @@
           </size>
          </property>
          <property name="text">
-          <string>удалить урок</string>
+          <string>удалить предмет</string>
          </property>
         </widget>
        </item>
