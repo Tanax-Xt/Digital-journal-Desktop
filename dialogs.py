@@ -1,4 +1,5 @@
 from hashlib import md5
+
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QLabel
 
 
@@ -15,7 +16,7 @@ class AboutDialog(QDialog):
         self.setLayout(self.layout)
 
 
-from PyQt6 import QtCore, QtGui, QtWidgets
+from PyQt6 import QtCore, QtWidgets
 
 
 class Ui_Dialog(object):
@@ -81,25 +82,6 @@ class Ui_Dialog(object):
         self.label_2.setText(_translate("Dialog", "Роль"))
 
 
-class AddUserDialog(QDialog, Ui_Dialog):
-    def __init__(self, db):
-        super().__init__()
-        self.db = db
-        self.setupUi(self)
-        roles = ["Ученик", "Учитель", "Администратор"]
-        self.comboBox.addItems(roles)
-        self.pushButton.clicked.connect(self.add_user)
-
-    def add_user(self):
-        login = self.lineEdit.text()
-        password = md5(bytes(self.lineEdit_2.text(), encoding='utf-8')).hexdigest()
-        name = self.lineEdit_3.text()
-        role = self.comboBox.currentText()
-        self.db.add_user(login, password, name, role)
-        self.close()
-
-
-
 class Ui_Dialog_2(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
@@ -130,17 +112,134 @@ class Ui_Dialog_2(object):
         self.pushButton.setText(_translate("Dialog", "Удалить"))
 
 
-class DelUser(QDialog, Ui_Dialog_2):
+class Ui_Dialog_3(object):
+    def setupUi(self, Dialog):
+        Dialog.setObjectName("Dialog")
+        Dialog.resize(582, 444)
+        self.verticalLayoutWidget = QtWidgets.QWidget(parent=Dialog)
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(180, 280, 241, 141))
+        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.checkBox = QtWidgets.QCheckBox(parent=self.verticalLayoutWidget)
+        self.checkBox.setObjectName("checkBox")
+        self.verticalLayout.addWidget(self.checkBox)
+        self.pushButton = QtWidgets.QPushButton(parent=self.verticalLayoutWidget)
+        self.pushButton.setObjectName("pushButton")
+        self.verticalLayout.addWidget(self.pushButton)
+        self.horizontalLayoutWidget = QtWidgets.QWidget(parent=Dialog)
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(50, 50, 481, 61))
+        self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
+        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.label = QtWidgets.QLabel(parent=self.horizontalLayoutWidget)
+        self.label.setObjectName("label")
+        self.horizontalLayout.addWidget(self.label)
+        self.subjTitle = QtWidgets.QLineEdit(parent=self.horizontalLayoutWidget)
+        self.subjTitle.setObjectName("subjTitle")
+        self.horizontalLayout.addWidget(self.subjTitle)
+
+        self.retranslateUi(Dialog)
+        QtCore.QMetaObject.connectSlotsByName(Dialog)
+
+    def retranslateUi(self, Dialog):
+        _translate = QtCore.QCoreApplication.translate
+        Dialog.setWindowTitle(_translate("Dialog", "Добавить предмет"))
+        self.checkBox.setText(_translate("Dialog", "Подтверждаю"))
+        self.pushButton.setText(_translate("Dialog", "Добавить"))
+        self.label.setText(_translate("Dialog", "Название предмета"))
+
+
+class Ui_Dialog_4(object):
+    def setupUi(self, Dialog):
+        Dialog.setObjectName("Dialog")
+        Dialog.resize(400, 300)
+        self.verticalLayoutWidget = QtWidgets.QWidget(parent=Dialog)
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(120, 120, 181, 171))
+        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.checkBox = QtWidgets.QCheckBox(parent=self.verticalLayoutWidget)
+        self.checkBox.setObjectName("checkBox")
+        self.verticalLayout.addWidget(self.checkBox)
+        self.pushButton = QtWidgets.QPushButton(parent=self.verticalLayoutWidget)
+        self.pushButton.setObjectName("pushButton")
+        self.verticalLayout.addWidget(self.pushButton)
+        self.comboBox = QtWidgets.QComboBox(parent=Dialog)
+        self.comboBox.setGeometry(QtCore.QRect(50, 20, 311, 71))
+        self.comboBox.setObjectName("comboBox")
+
+        self.retranslateUi(Dialog)
+        QtCore.QMetaObject.connectSlotsByName(Dialog)
+
+    def retranslateUi(self, Dialog):
+        _translate = QtCore.QCoreApplication.translate
+        Dialog.setWindowTitle(_translate("Dialog", "Удалить предмет"))
+        self.checkBox.setText(_translate("Dialog", "Подтверждаю"))
+        self.pushButton.setText(_translate("Dialog", "Удалить"))
+
+
+class AddUserDialog(QDialog, Ui_Dialog):
+    def __init__(self, db):
+        super().__init__()
+        self.db = db
+        self.setupUi(self)
+        roles = ["Ученик", "Учитель", "Администратор"]
+        self.comboBox.addItems(roles)
+        self.pushButton.clicked.connect(self.add_user)
+
+    def add_user(self):
+        login = self.lineEdit.text()
+        password = md5(bytes(self.lineEdit_2.text(), encoding='utf-8')).hexdigest()
+        name = self.lineEdit_3.text()
+        role = self.comboBox.currentText()
+        self.db.add_user(login, password, name, role)
+        self.close()
+
+
+class DelUserDialog(QDialog, Ui_Dialog_2):
     def __init__(self, db):
         super().__init__()
         self.db = db
         self.setupUi(self)
         names = [''.join(i) for i in db.get_users_name_list()]
-        self.comboBox.addItems(names)
+        self.comboBox.addItems(sorted(names))
         self.pushButton.clicked.connect(self.del_user)
 
     def del_user(self):
         if self.checkBox.isChecked():
             name = self.comboBox.currentText()
             self.db.del_user(name)
+            self.close()
+
+
+class AddSubjDialog(QDialog, Ui_Dialog_3):
+    def __init__(self, db):
+        super().__init__()
+        self.db = db
+        self.setupUi(self)
+        self.pushButton.clicked.connect(self.add_subj)
+
+    def add_subj(self):
+        title = self.subjTitle.text()
+        self.db.add_subj(title)
+        self.close()
+
+
+class DelSubjDialog(QDialog, Ui_Dialog_4):
+    def __init__(self, db):
+        super().__init__()
+        self.db = db
+        self.setupUi(self)
+        subjs = [''.join(i) for i in db.get_subjs_list()]
+        self.comboBox.addItems(sorted(subjs))
+        self.pushButton.clicked.connect(self.del_subj)
+
+    def del_subj(self):
+        if self.checkBox.isChecked():
+            subj = self.comboBox.currentText()
+            self.db.del_subj(subj)
             self.close()

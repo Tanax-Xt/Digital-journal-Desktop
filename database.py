@@ -39,7 +39,11 @@ class DataBase:
         return result.fetchall()[0][0]
 
     def get_name(self, login):
-        result = self.cursor.execute("SELECT `name` FROM `users` WHERE `login` = ?", (login,))
+        result = self.cursor.execute("SELECT name FROM users WHERE login = ?", (login,))
+        return result.fetchall()[0][0]
+
+    def get_login(self, name):
+        result = self.cursor.execute("SELECT login FROM users WHERE name = ?", (name,))
         return result.fetchall()[0][0]
 
     def get_role(self, login):
@@ -73,6 +77,30 @@ class DataBase:
         if role == 1:
             self.cursor.execute("DELETE FROM marks WHERE login = ?", (login,)).fetchall()
         self.conn.commit()
+
+    def subjs_list(self):
+        return list(self.cursor.execute("SELECT title FROM lessons"))
+
+    def update_marks(self, login, marks):
+        self.cursor.execute("UPDATE marks SET marks = ? WHERE login = ?", (marks, login))
+        self.conn.commit()
+
+    def add_subj(self, title):
+        if not self.subj_exist(title):
+            self.cursor.execute("INSERT INTO lessons (title) VALUES (?)", (title,))
+            return self.conn.commit()
+
+    def subj_exist(self, title) -> bool:
+        result = self.cursor.execute("SELECT id FROM lessons WHERE title = ?", (title,))
+        return bool(len(result.fetchall()))
+
+    def get_subjs_list(self):
+        return list(self.cursor.execute("SELECT title FROM lessons"))
+
+    def del_subj(self, title):
+        self.cursor.execute("DELETE FROM lessons WHERE title = ?", (title,)).fetchall()
+        self.conn.commit()
+
 
     # def get_user_subj(self, user_id):
     #     """Достаем subj юзера в базе по его user_id"""

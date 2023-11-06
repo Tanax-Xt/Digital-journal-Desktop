@@ -1,10 +1,10 @@
-
 from PyQt6 import uic
 from PyQt6.QtGui import QPixmap, QStandardItem, QStandardItemModel
 from PyQt6.QtWidgets import QMainWindow, QLabel
 
-from dialogs import AboutDialog, AddUserDialog, DelUser
 import start_widget
+from dialogs import AboutDialog, AddUserDialog, DelUserDialog, AddSubjDialog, DelSubjDialog
+
 
 class MainWidget(QMainWindow):
     def __init__(self, login, db):
@@ -25,12 +25,15 @@ class MainWidget(QMainWindow):
             self.delUser.clicked.connect(self.del_user)
         if self.db.get_role(login) in [2, 3]:
             self.saveButton.clicked.connect(self.save_table)
+            self.addSubj.clicked.connect(self.add_subj)
+            self.delSubj.clicked.connect(self.del_subj)
             self.teacher_table()
 
     def teacher_table(self):
-        logins = [''.join(i) for i in self.db.get_users_login_list_from_marks()]
+        logins = sorted([''.join(i) for i in self.db.get_users_login_list_from_marks()],
+                        key=lambda x: self.db.get_name(x))
         marks = {}
-        subj = []
+        subj = sorted(map(lambda x: x[0], self.db.subjs_list()))
         for i in logins:
             user_marks = {}
             if self.db.get_user_marks(i) is not None:
@@ -40,12 +43,8 @@ class MainWidget(QMainWindow):
                     m = list(map(str, m[1:-1].split(',')))
                     user_marks[s] = m
                 marks[self.db.get_name(i)] = user_marks
-                subj.extend(list(user_marks.keys()))
             else:
                 marks[self.db.get_name(i)] = {}
-        subj = list(set(subj))
-        subj.sort()
-        logins.sort(key=lambda x: self.db.get_name(x))
 
         self.model = QStandardItemModel(len(logins), len(subj) + 1)
         self.model.setHorizontalHeaderLabels(["Имя", *subj])
@@ -62,7 +61,21 @@ class MainWidget(QMainWindow):
         self.tableView.setModel(self.model)
 
     def save_table(self):
-        ...
+        logins = sorted([''.join(i) for i in self.db.get_users_login_list_from_marks()],
+                        key=lambda x: self.db.get_name(x))
+        subj = sorted(map(lambda x: x[0], self.db.subjs_list()))
+        for row in range(len(logins)):
+            user_marks = '{'
+            user_login = self.db.get_login(self.model.index(row, 0).data())
+            for column in range(1, len(subj) + 1):
+                marks = self.model.index(row, column).data()
+                if marks is not None:
+                    user_marks += f"'{subj[column - 1]}':[{''.join(marks.split())}];"
+            user_marks = user_marks[:-1] + '}'
+            if len(user_marks) == 1:
+                user_marks = None
+            self.db.update_marks(user_login, user_marks)
+
 
     def set_logo(self):
         self.pixmap = QPixmap('data/logo_70_70.jpeg')
@@ -76,8 +89,18 @@ class MainWidget(QMainWindow):
         dlg.exec()
         self.teacher_table()
 
+    def add_subj(self):
+        dlg = AddSubjDialog(self.db)
+        dlg.exec()
+        self.teacher_table()
+
+    def del_subj(self):
+        dlg = DelSubjDialog(self.db)
+        dlg.exec()
+        self.teacher_table()
+
     def del_user(self):
-        dlg = DelUser(self.db)
+        dlg = DelUserDialog(self.db)
         dlg.exec()
         self.teacher_table()
 

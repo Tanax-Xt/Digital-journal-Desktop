@@ -7,7 +7,7 @@ from PyQt6.QtGui import QPixmap, QStandardItem, QStandardItemModel
 from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel
 
 from database import DataBase
-from dialogs import AboutDialog, AddUserDialog, DelUser
+from dialogs import AboutDialog, AddUserDialog, DelUserDialog
 import start_widget
 
 if __name__ == '__main__':
