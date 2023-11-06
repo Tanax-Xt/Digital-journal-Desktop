@@ -1,7 +1,9 @@
 from hashlib import md5
 
 from PyQt6 import QtCore, QtWidgets
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QLabel
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QLabel, QGraphicsScene
+
+from chart import Chart
 
 
 class AboutDialog(QDialog):
@@ -180,6 +182,26 @@ class Ui_Dialog_4(object):
         self.pushButton.setText(_translate("Dialog", "Удалить"))
 
 
+class Ui_Form(object):
+    def setupUi(self, Form):
+        Form.setObjectName("Form")
+        Form.resize(661, 519)
+        self.graphicsView = QtWidgets.QGraphicsView(parent=Form)
+        self.graphicsView.setGeometry(QtCore.QRect(40, 40, 581, 381))
+        self.graphicsView.setObjectName("graphicsView")
+        self.closeButton = QtWidgets.QPushButton(parent=Form)
+        self.closeButton.setGeometry(QtCore.QRect(270, 450, 113, 32))
+        self.closeButton.setObjectName("closeButton")
+
+        self.retranslateUi(Form)
+        QtCore.QMetaObject.connectSlotsByName(Form)
+
+    def retranslateUi(self, Form):
+        _translate = QtCore.QCoreApplication.translate
+        Form.setWindowTitle(_translate("Form", "Успеваемость"))
+        self.closeButton.setText(_translate("Form", "Закрыть"))
+
+
 class AddUserDialog(QDialog, Ui_Dialog):
     def __init__(self, db):
         super().__init__()
@@ -241,3 +263,20 @@ class DelSubjDialog(QDialog, Ui_Dialog_4):
             subj = self.comboBox.currentText()
             self.db.del_subj(subj)
             self.close()
+
+
+class ChartDialog(QDialog, Ui_Form):
+    def __init__(self, model, db):
+        super().__init__()
+        self.setupUi(self)
+        chart = Chart(model, db)
+        chart.marks()
+        scene = QGraphicsScene()
+        scene.addWidget(chart)
+        self.graphicsView.setScene(scene)
+        self.graphicsView.show()
+
+        self.closeButton.clicked.connect(self.close_chart)
+
+    def close_chart(self):
+        self.close()

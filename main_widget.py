@@ -6,7 +6,7 @@ from PyQt6.QtGui import QPixmap, QStandardItem, QStandardItemModel
 from PyQt6.QtWidgets import QMainWindow, QLabel
 
 import start_widget
-from dialogs import AboutDialog, AddUserDialog, DelUserDialog, AddSubjDialog, DelSubjDialog
+from dialogs import AboutDialog, AddUserDialog, DelUserDialog, AddSubjDialog, DelSubjDialog, ChartDialog
 
 
 class MainWidget(QMainWindow):
@@ -34,7 +34,10 @@ class MainWidget(QMainWindow):
             self.csvExport.clicked.connect(self.teacher_csv_export)
             self.teacher_table()
         if self.db.get_role(login) == 1:
-            ...
+            self.marksChart.clicked.connect(self.marks_chart)
+            self.studExselExport.clicked.connect(self.stud_exsel_export)
+            self.studCsvExport.clicked.connect(self.stud_csv_export)
+            self.stud_table(login)
 
     def teacher_table(self):
         logins = sorted([''.join(i) for i in self.db.get_users_login_list_from_marks()],
@@ -147,6 +150,47 @@ class MainWidget(QMainWindow):
                 for column in range(len(subj) + 1):
                     col.append(self.model.index(row, column).data())
                 writer.writerow(col)
+
+    def stud_table(self, login):
+        marks = {}
+        subj = sorted(map(lambda x: x[0], self.db.subjs_list()))
+        user_marks = {}
+        if self.db.get_user_marks(login) is not None:
+            for s_m in self.db.get_user_marks(login)[1:-1].split(';'):
+                s, m = s_m.split(':')
+                s = s[1:-1]
+                m = list(map(str, m[1:-1].split(',')))
+                user_marks[s] = m
+            marks[self.db.get_name(login)] = user_marks
+        else:
+            marks[self.db.get_name(login)] = {}
+
+        self.model = QStandardItemModel(2, len(subj) + 1)
+        self.model.setHorizontalHeaderLabels(["Имя", *subj])
+
+        for column in range(len(subj) + 1):
+            name = self.db.get_name(login)
+            if column == 0:
+                item = QStandardItem(name)
+                item2 = QStandardItem('Средняя оценка')
+            else:
+                if subj[column - 1] in marks[name]:
+                    item = QStandardItem(', '.join(marks[name][subj[column - 1]]))
+                    item2 = QStandardItem(
+                        f'{sum(map(int, marks[name][subj[column - 1]])) / len(marks[name][subj[column - 1]]):.2f}')
+            self.model.setItem(0, column, item)
+            self.model.setItem(1, column, item2)
+        self.tableView.setModel(self.model)
+
+    def marks_chart(self):
+        dlg = ChartDialog(self.model, self.db)
+        dlg.exec()
+
+    def stud_csv_export(self):
+        ...
+
+    def stud_exsel_export(self):
+        ...
 
     def logout(self):
         with open('data/login.txt', 'w') as f:
