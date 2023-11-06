@@ -25,7 +25,15 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget">
+  <widget class="QWidget" name="centralwidget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1441</width>
+     <height>751</height>
+    </rect>
+   </property>
    <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
@@ -39,7 +47,7 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="studCsvExport">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -52,7 +60,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_3">
+        <widget class="QPushButton" name="studExselExport">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -106,13 +114,13 @@
      </item>
     </layout>
    </widget>
-   <widget class="QTableWidget" name="tableWidget">
+   <widget class="QTableView" name="tableView">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>180</y>
       <width>1421</width>
-      <height>561</height>
+      <height>581</height>
      </rect>
     </property>
    </widget>

@@ -1,3 +1,6 @@
+import csv
+
+import xlsxwriter
 from PyQt6 import uic
 from PyQt6.QtGui import QPixmap, QStandardItem, QStandardItemModel
 from PyQt6.QtWidgets import QMainWindow, QLabel
@@ -27,7 +30,11 @@ class MainWidget(QMainWindow):
             self.saveButton.clicked.connect(self.save_table)
             self.addSubj.clicked.connect(self.add_subj)
             self.delSubj.clicked.connect(self.del_subj)
+            self.exselExport.clicked.connect(self.teacher_exsel_export)
+            self.csvExport.clicked.connect(self.teacher_csv_export)
             self.teacher_table()
+        if self.db.get_role(login) == 1:
+            ...
 
     def teacher_table(self):
         logins = sorted([''.join(i) for i in self.db.get_users_login_list_from_marks()],
@@ -107,6 +114,39 @@ class MainWidget(QMainWindow):
         '''Обработка "О программе"'''
         dlg = AboutDialog()
         dlg.exec()
+
+    def teacher_exsel_export(self):
+        workbook = xlsxwriter.Workbook('files/Успеваемость.xlsx')
+        worksheet = workbook.add_worksheet()
+
+        subj = sorted(map(lambda x: x[0], self.db.subjs_list()))
+        logins = sorted([''.join(i) for i in self.db.get_users_login_list_from_marks()],
+                        key=lambda x: self.db.get_name(x))
+
+        for column in range(len(subj) + 1):
+            if column == 0:
+                worksheet.write(0, column, 'Имя')
+            else:
+                worksheet.write(0, column, subj[column - 1])
+
+        for row in range(len(logins)):
+            for column in range(len(subj) + 1):
+                worksheet.write(row + 1, column, self.model.index(row, column).data())
+
+        workbook.close()
+
+    def teacher_csv_export(self):
+        with open('files/Успеваемость.csv', 'w', newline='', encoding="utf8") as csvfile:
+            writer = csv.writer(csvfile, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            subj = sorted(map(lambda x: x[0], self.db.subjs_list()))
+            logins = sorted([''.join(i) for i in self.db.get_users_login_list_from_marks()],
+                            key=lambda x: self.db.get_name(x))
+            writer.writerow(['Имя', *subj])
+            for row in range(len(logins)):
+                col = []
+                for column in range(len(subj) + 1):
+                    col.append(self.model.index(row, column).data())
+                writer.writerow(col)
 
     def logout(self):
         with open('data/login.txt', 'w') as f:
